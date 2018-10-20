@@ -1,0 +1,25 @@
+<Window x:Class="Tourenbuch.ShellView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" IsMainMenu="True">
+            <MenuItem Header="_Start" x:Name="ShowStartPage" IsEnabled="{Binding UserIsLoggedIn}">
+            </MenuItem>
+            <MenuItem Header="_Tourenbuch" IsEnabled="{Binding UserIsLoggedIn}">
+                <MenuItem Header="_Neu" x:Name="CreatNewBook" IsEnabled="{Binding UserIsLoggedIn}"/>
+            </MenuItem>
+            <MenuItem Header="_Tour" IsEnabled="{Binding UserIsLoggedIn}">
+                <MenuItem Header="_Neu" x:Name="OpenNewTour" IsEnabled="{Binding UserIsLoggedIn}"/>
+                <MenuItem Header="_Suche" x:Name="SearchTour" IsEnabled="{Binding UserIsLoggedIn}"/>
+            </MenuItem>
+            <MenuItem Header="_Mountains" IsEnabled="{Binding UserIsLoggedIn}">
+                <MenuItem Header="_Neu" x:Name="OpenNewMountain" IsEnabled="{Binding UserIsLoggedIn}"/>
+            </MenuItem>
+            <MenuItem Header="_Kategorie" IsEnabled="{Binding UserIsLoggedIn}">
+                <MenuItem Header="_Neu" x:Name="OpenNewCategory" IsEnabled="{Binding UserIsLoggedIn}"/>
+            </MenuItem>
+        </Menu>
+        <ContentControl x:Name="ActiveItem" />
+    </DockPanel>
+
+</Window>

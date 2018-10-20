@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="Tourenbuch.NewTourView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:controls="clr-namespace:Tourenbuch.Controls"
+             xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
+             xmlns:toolkitXCeed="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="2">Kameraden</Label>
+        <controls:Multiselect Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" 
+                              ItemsSource="{Binding PossibleMates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItems="{Binding SelectedMates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              DefaultText="Wer war dabei?" AllPossible="False"
+                              x:Name="MCMates"/>
+
+        <Label Grid.Row="0" Grid.Column="0">Tourenbuch</Label>
+        <controls:Multiselect Grid.Row="0" Grid.Column="1" Width="200" Height="30" 
+                              ItemsSource="{Binding TourBooksAsMCItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              SelectedItems="{Binding SelectedTourBooks, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                              DefaultText="Tourenbuch" AllPossible="True"
+                              x:Name="MC">
+        </controls:Multiselect>
+
+        <Label Grid.Row="1" Grid.Column="0">Name der Tour</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding CurrentTour.Name}"></TextBox>
+
+        <Label Grid.Row="2" Grid.Column="0">Startdatum</Label>
+        <DatePicker Grid.Row="2" Grid.Column="1" SelectedDateFormat="Long" SelectedDate="{Binding CurrentTour.StartDate}"
+                  DisplayDateStart="1/01/10" DisplayDateEnd="12/31/29" 
+                  FirstDayOfWeek="Monday"/>
+
+        <Label Grid.Row="3" Grid.Column="0">Enddatum</Label>
+        <DatePicker Grid.Row="3" Grid.Column="1" SelectedDateFormat="Long" SelectedDate="{Binding CurrentTour.EndDate}"
+                  DisplayDateStart="1/01/10" DisplayDateEnd="12/31/29" 
+                  FirstDayOfWeek="Monday"/>
+
+        <Label Grid.Row="4" Grid.Column="0">Tourenkategorie</Label>
+        <ComboBox Grid.Row="4" Grid.Column="1" 
+                  ItemsSource="{Binding Categories}" 
+                  DisplayMemberPath="CategoryName" 
+                  SelectedValuePath="Id"
+                  SelectedValue="{Binding CurrentTour.Category}">
+            
+        </ComboBox>
+        
+        <Label Grid.Row="5" Grid.Column="0">Gipfelziele</Label>
+        <toolkit:AutoCompleteBox Grid.Row="5" Grid.Column="1" 
+                                 ItemsSource="{Binding PredictedMountains}" 
+                                 IsTextCompletionEnabled="True"
+                                 ValueMemberBinding="{Binding mountainName}"
+                                 FilterMode="Contains"
+                                 >
+            <toolkit:AutoCompleteBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat=" {0} - {1} m.ü.N.N">
+                                <Binding Path="mountainName"/>
+                                <Binding Path="height"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </toolkit:AutoCompleteBox.ItemTemplate>
+        </toolkit:AutoCompleteBox>
+
+        <Label Grid.Row="6" Grid.Column="0">Gipfel erreicht</Label>
+        <CheckBox Grid.Row="6" Grid.Column="1" IsChecked="{Binding CurrentTour.SummitReached}"/>
+
+        <Label Grid.Row="7" Grid.Column="0">Beschreibung</Label>
+        <!--<TextBox Grid.Row="6" Grid.Column="1" Text="{Binding CurrentTour.Report}" 
+                 AcceptsReturn="True" TextWrapping="Wrap"
+                 SpellCheck.IsEnabled="True" Language="de-DE" MinHeight="200"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"/>-->
+        <Grid Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <toolkitXCeed:RichTextBoxFormatBar Grid.Row="0" Target="{Binding ElementName=_richTextBox}" />
+            <toolkitXCeed:RichTextBox x:Name="_richTextBox" Grid.Row="1"
+                                  Margin="10" BorderBrush="Gray" Padding="10"
+                                          Text="{Binding CurrentTour.Report}" 
+                                          ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                <RichTextBox.CommandBindings>
+                    <CommandBinding Command="EditingCommands.ToggleBold"/>
+                    <CommandBinding Command="EditingCommands.ToggleItalic"/>
+                </RichTextBox.CommandBindings>
+            </toolkitXCeed:RichTextBox>
+        </Grid>
+        
+        <Button Grid.Row="40" Grid.ColumnSpan="4" 
+                IsEnabled="{Binding CanSave}"
+                Content="{Binding SaveButtonContent}"
+                cal:Message.Attach="[Event Click] = [Action saveTour]"/>
+    </Grid>
+</UserControl>

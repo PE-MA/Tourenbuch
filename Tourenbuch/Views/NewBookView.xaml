@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Tourenbuch.NewBookView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:cal="http://www.caliburnproject.org">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0">Name des Tourenbuchs</Label>
+        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding CurrentBook.BookName}"></TextBox>
+
+        <Button Grid.Row="1" Grid.ColumnSpan="2" 
+                IsEnabled="{Binding CanSave}"
+                Content="{Binding SaveButtonContent}"
+                cal:Message.Attach="[Event Click] = [Action createNewBook]"/>
+    </Grid>
+</UserControl>
