@@ -52,6 +52,20 @@ namespace Tourenbuch
             }
         }
 
+        private ObservableCollection<User> users;
+        public ObservableCollection<User> Users
+        {
+            get { return users; }
+            set
+            {
+                if (users != value)
+                {
+                    users = value;
+                    NotifyOfPropertyChange();
+                }
+            }
+        }
+
         public StartPageViewModel()
         {
             if(dataManager == null)
@@ -60,6 +74,8 @@ namespace Tourenbuch
             }
             TourBooks = dataManager.getAllBooks();
             Tours = dataManager.getAllTours();
+            Users = dataManager.getAllUsers();
+            NotifyOfPropertyChange(() => Users);
         }
 
         private TourBook selectedTourBook;

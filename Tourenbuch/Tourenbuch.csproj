@@ -114,6 +114,7 @@
       <DependentUpon>Multiselect.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Node.cs" />
+    <Compile Include="Converters\AssignedUsersToStringConverter.cs" />
     <Compile Include="Converters\BaseConverter.cs" />
     <Compile Include="Converters\RTFToPlainTextConverter.cs" />
     <Compile Include="IShell.cs" />
@@ -133,6 +134,10 @@
     </Compile>
     <Compile Include="ViewModels\StartPageViewModel.cs" />
     <Page Include="Controls\Multiselect.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -250,6 +255,12 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\chimpanzee.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

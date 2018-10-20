@@ -9,48 +9,61 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="0">Tourenbücher</Label>
-        <ListBox x:Name="TourBooks" Grid.Row="1" Grid.Column="0" SelectionMode="Single"
-            HorizontalContentAlignment="Stretch" MinHeight="200" SelectedItem="{Binding SelectedTourBook, Mode=TwoWay}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{Binding BookName}"/>
-                        <Button Grid.Column="1" cal:Message.Attach="EditBook($dataContext)">Edit</Button>
-                        <Button Grid.Column="2" cal:Message.Attach="DeleteBook($dataContext)">Delete</Button>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Label Grid.Row="0" Grid.Column="1">Enthaltene Touren</Label>
-        <ListBox x:Name="ContainedTours" Grid.Row="1" Grid.Column="1" SelectionMode="Single">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <Label Grid.Row="2" Grid.Column="0">Touren</Label>
-
-        <ListView Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Tours}" 
+        <!--<Border Grid.Row="0"
+            BorderBrush="Black" BorderThickness="2" CornerRadius="8,8,8,8" Background="DarkOrange" Opacity="0.8" Padding="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0">Tourenbücher</Label>
+                <ListBox x:Name="TourBooks" Grid.Row="1" Grid.Column="0" SelectionMode="Single"
+                 ScrollViewer.VerticalScrollBarVisibility="Visible"
+            HorizontalContentAlignment="Stretch" SelectedItem="{Binding SelectedTourBook, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding BookName}"/>
+                                <Button Grid.Column="1" cal:Message.Attach="EditBook($dataContext)">Edit</Button>
+                                <Button Grid.Column="2" cal:Message.Attach="DeleteBook($dataContext)">Delete</Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Label Grid.Row="0" Grid.Column="1">Enthaltene Touren</Label>
+                <ListBox x:Name="ContainedTours" Grid.Row="1" Grid.Column="1" SelectionMode="Single">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>-->
+        
+        <Label Grid.Row="0" Grid.Column="0">Aktuellste Tourenberichte</Label>
+        <ListView Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Tours}" 
                   SelectionMode="Single" HorizontalContentAlignment="Stretch" 
                   SelectedItem="{Binding SelectedTour, Mode=TwoWay}"
                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                   ScrollViewer.CanContentScroll="True"
                   ctrl:ListViewLayoutManager.Enabled="True"
                   >
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Height" Value="50" />
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
 
                 <GridView AllowsColumnReorder="true"
@@ -87,6 +100,16 @@
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Report, Converter={converters:RTFToPlainTextConverter}}"
                       Header="Bericht"
                       ctrl:RangeColumn.IsFillColumn="true"/>
+
+                    <GridViewColumn
+                      Header="Kameraden">
+                        <GridViewColumn.DisplayMemberBinding>
+                            <MultiBinding Converter="{converters:AssignedUsersToStringConverter}" UpdateSourceTrigger="PropertyChanged">
+                                <Binding Path="AssignedUserIDs" UpdateSourceTrigger="PropertyChanged"/>
+                                <Binding Path="DataContext.Users" RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=UserControl}" UpdateSourceTrigger="PropertyChanged"/>
+                            </MultiBinding>
+                        </GridViewColumn.DisplayMemberBinding>
+                    </GridViewColumn>
 
                     <GridViewColumn Header="Edit">
                         <GridViewColumn.CellTemplate>
